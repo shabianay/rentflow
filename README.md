@@ -1,59 +1,190 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+<div align="center">
+  <h1>RentFlow</h1>
+  <p><strong>Sistem Manajemen Rental Barang</strong></p>
+  <p>
+    Aplikasi web berbasis Laravel untuk mengelola penyewaan barang seperti kendaraan, kamera, alat camping, sound system, dan lainnya.
+  </p>
+</div>
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+---
 
-## About Laravel
+## Fitur
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+### Pelanggan
+- Landing page & katalog unit rental
+- Detail unit (foto, deskripsi, harga harian/mingguan/bulanan, ulasan)
+- Pemesanan multi-unit dengan keranjang belanja
+- Kalkulasi harga otomatis (weekend pricing, diskon mingguan/bulanan)
+- Pembayaran via **Midtrans Snap** (QRIS, VA, kartu kredit, e-wallet)
+- Invoice PDF otomatis
+- Dashboard pemesanan, invoice, dan profil
+- Rating & ulasan setelah sewa
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+### Admin
+- Dashboard statistik (total booking, pendapatan, unit aktif, pelanggan)
+- CRUD unit, kategori, pelanggan
+- Manajemen pemesanan & status (pending → confirmed → active → completed/cancelled)
+- Manajemen pembayaran & invoice
+- Laporan pendapatan dengan ekspor CSV
+- Kalender booking bulanan
+- Moderasi ulasan
+- Notifikasi
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+---
 
-## Learning Laravel
+## Tech Stack
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+| Lapisan | Teknologi |
+|---|---|
+| **Backend** | Laravel 12, PHP ^8.2 |
+| **Frontend** | Blade, Tailwind CSS 4, Alpine.js, Flatpickr |
+| **Database** | SQLite (default) |
+| **Payment** | Midtrans Snap API |
+| **PDF** | barryvdh/laravel-dompdf |
+| **Testing** | PHPUnit 11 (142 tests) |
+| **Dev Tools** | Vite, Laravel Pint, Concurrently |
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+---
 
-## Laravel Sponsors
+## Persyaratan Sistem
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+- PHP ^8.2 (extensions: bcmath, ctype, curl, dom, fileinfo, gd, iconv, mbstring, openssl, pdo, pdo_sqlite, tokenizer, xml)
+- Composer 2.x
+- Node.js 18+ & npm
+- SQLite (built-in di PHP)
 
-### Premium Partners
+---
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+## Instalasi
 
-## Contributing
+### Quick Install (satu perintah)
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+```bash
+composer setup
+```
 
-## Code of Conduct
+Perintah di atas akan menjalankan:
+1. `composer install`
+2. Copy `.env.example` ke `.env`
+3. `php artisan key:generate`
+4. `php artisan migrate`
+5. `npm install`
+6. `npm run build`
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+### Manual
 
-## Security Vulnerabilities
+```bash
+# 1. Clone repositori
+git clone https://github.com/shabianay/rentflow.git
+cd rentflow
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+# 2. Install dependensi PHP
+composer install
 
-## License
+# 3. Setup environment
+cp .env.example .env
+php artisan key:generate
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+# 4. Setup database SQLite
+touch database/database.sqlite
+php artisan migrate
+php artisan db:seed   # membuat admin@rentflow.test / password
+
+# 5. Install & build frontend
+npm install
+npm run build
+
+# 6. Konfigurasi Midtrans (edit .env)
+# MIDTRANS_SERVER_KEY=your_sandbox_server_key
+# MIDTRANS_CLIENT_KEY=your_sandbox_client_key
+# MIDTRANS_IS_PRODUCTION=false
+```
+
+---
+
+## Menjalankan Aplikasi
+
+### Development
+
+```bash
+composer dev
+```
+
+Menjalankan secara bersamaan:
+- `php artisan serve` → http://localhost:8000
+- `php artisan queue:listen` (queue worker)
+- `npm run dev` (Vite HMR)
+
+### Production
+
+```bash
+npm run build
+php artisan config:cache
+php artisan route:cache
+php artisan view:cache
+```
+
+### Testing
+
+```bash
+composer test
+# atau
+php artisan test
+```
+
+Menggunakan SQLite in-memory — **142 tests, 324 assertions**.
+
+---
+
+## Struktur Direktori
+
+```
+app/
+├── Http/Controllers/       # 16 controller (fitur-based)
+├── Http/Middleware/         # EnsureAdmin, EnsureCustomer
+├── Jobs/                    # Email queue jobs
+├── Mail/                    # Mailable classes
+├── Models/                  # 9 Eloquent models
+├── Services/                # PricingService, MidtransService, dll.
+config/
+├── midtrans.php             # Konfigurasi Midtrans
+database/
+├── migrations/              # 19 migration
+├── seeders/                 # DatabaseSeeder
+resources/
+├── css/app.css              # Tailwind 4 + custom components
+├── js/app.js                # Alpine.js + Flatpickr
+├── views/                   # 50+ Blade template
+routes/
+└── web.php                  # Semua route (single file)
+tests/
+├── Feature/                 # 15 file test fitur
+└── Unit/                    # 4 file test unit
+```
+
+---
+
+## Alur Pembayaran
+
+1. Booking dibuat → record `Payment` dengan status `pending`
+2. `PaymentController@process` → call **Midtrans Snap API** → dapat `snap_token` & `snap_redirect_url`
+3. Pelanggan bayar via popup Snap atau redirect
+4. Midtrans kirim notifikasi ke `/payments/notification` (webhook, tanpa CSRF)
+5. Redirect kembali ke `/payments/result/{status}/{booking}`
+6. Jika sukses: booking → `active`, unit → `on_rent`, invoice dibuat otomatis
+
+---
+
+## Keamanan
+
+- **CSRF Protection** — Semua route POST/PUT/PATCH/DELETE otomatis
+- **Midtrans Webhook** — Route `/payments/notification` CSRF-exempt; validasi signature `SHA512(order_id + status_code + gross_amount + server_key)`
+- **Role Middleware** — `EnsureAdmin` (role=admin), `EnsureCustomer` (role≠customer → 403)
+- **XSS Prevention** — Blade `{{ }}` auto-escaping + DOMPurify
+- **Password** — bcrypt (rounds=12)
+
+---
+
+## Lisensi
+
+[MIT License](LICENSE)
